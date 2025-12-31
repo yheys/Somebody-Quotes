@@ -1,38 +1,27 @@
 from tkinter import *
 import requests
 
+def get_quote():
+    try:
+        response = requests.get("https://api.kanye.rest")
+        response.raise_for_status()
+        quote = response.json()["quote"]
+        canvas.itemconfig(quote_text, text=quote)
+    except requests.exceptions.RequestException:
+        canvas.itemconfig(quote_text, text="Failed to get quote. Try again.")
 
-def get_quots():
+window = Tk()
+window.title("Somebody Says")
+window.config(padx=50, pady=50)
 
-    quot=requests.get(url="https://api.kanye.rest")
-    quot.raise_for_status()
-    qoute=quot.json()["quote"]
-    canvas.itemconfig(qout_text, text=qoute)
+canvas = Canvas(width=500, height=500)
+bg_image = PhotoImage(file="a4531c951cc6f36db591f1a8c529cf40-removebg-preview.png")
+canvas.create_image(250, 250, image=bg_image)
+quote_text = canvas.create_text(250, 250, text="Click the button for a quote", width=250, font=("Times New Roman", 20), fill="black")
+canvas.grid(column=1, row=1)
 
-
-
-
-
-
-
-
-window=Tk()
-window.title("Somebody says")
-window.config(padx=50,pady=50)
-
-canvas=Canvas(width=500,height=500)
-p1=PhotoImage(file="a4531c951cc6f36db591f1a8c529cf40-removebg-preview.png")
-canvas.create_image(250,250, image=p1)
-qout_text=canvas.create_text(200,260,text="the text is here",width=250,font=("New Times Roman",20))
-canvas.grid(column=1,row=1)
-
-
-p2=PhotoImage(file="b43a892e3f68c50a5b7ce996aa41a1af-removebg-preview (1).png")
-button=Button(image=p2,width=150,height=200,highlightthickness=0,command=get_quots)
-button.grid(column=1,row=2)
-
-
-
-
+button_image = PhotoImage(file="b43a892e3f68c50a5b7ce996aa41a1af-removebg-preview (1).png")
+button = Button(image=button_image, highlightthickness=0, command=get_quote)
+button.grid(column=1, row=2)
 
 window.mainloop()
